@@ -1,26 +1,36 @@
 const mongoose = require('mongoose');
 const dayjs = require('dayjs');
 
+const formatDate = function (createdDate) {
+    return dayjs(createdDate).format('dddd MMMM D, YYYY')
+}
+
 const reactionSchema = new mongoose.Schema({
-    reactionId: {
-        type: Schema.Types.ObjectId,
-        default: new ObjectId()
+        reactionId: {
+            type: Schema.Types.ObjectId,
+            default: new ObjectId()
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            maxLength: 280
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        createdAt: {
+            type: Date,
+            default: dayjs(),
+            get: formatDate
+        }
     },
-    reactionBody: {
-        type: String,
-        required: true,
-        maxLength: 280
-    },
-    username: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
-        default: dayjs(),
-        //TODO: method
+    {
+        toJSON: {
+            getters: true
+        }
     }
-})
+)
 
 const thoughtSchema = new mongoose.Schema(
     {
@@ -32,7 +42,7 @@ const thoughtSchema = new mongoose.Schema(
         createdAt: {
             type: Date,
             default: dayjs(),
-            //TODO: method
+            get: formatDate
 
         },
         username: {
@@ -48,5 +58,8 @@ const thoughtSchema = new mongoose.Schema(
                     return this.reactions.length
                 }
             }
+        },
+        toJSON: {
+            virtuals: true
         }
     })
