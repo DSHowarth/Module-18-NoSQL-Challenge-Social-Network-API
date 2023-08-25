@@ -67,6 +67,18 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
 
         user.friends.push(req.params.friendId)
         user.save();
+        res.status(200).json(user)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
+
+router.delete('/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const user = await User.findOne({_id: {$eq: req.params.userId}})
+
+        user.friends.splice(user.friends.indexOf(req.params.friendId), 1)
+        user.save();
         res.status(200).json(newUser)
     } catch (err) {
         res.status(500).json(err)

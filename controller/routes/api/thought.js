@@ -69,6 +69,30 @@ router.delete('/', async (req, res) => {
     }
 })
 
+router.post('/:thoughtId/reactions', async (req, res) => {
+    try {
+        const thought = await Thought.findOne({_id: {$eq: req.body.thoughtId}})
+
+        thought.reactions.push(req.body)
+        thought.save();
+
+        res.status(200).json(thought)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
+
+router.delete('/:thoughtId/reactions', async (req, res) => {
+    try {
+        const thought = await Thought.findOne({_id: {$eq: req.body.thoughtId}})
+        const reactionDelete = await thought.reactions.id(req.body.reactionId).remove();
+        res.status(200).json(reactionDelete)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
+
+
 
 
 module.exports = router
