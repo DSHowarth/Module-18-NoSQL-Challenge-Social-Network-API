@@ -63,3 +63,7 @@ const thoughtSchema = new mongoose.Schema(
             virtuals: true
         }
     })
+
+const Thought = mongoose.model('Thought', thoughtSchema);
+
+module.exports = Thought
