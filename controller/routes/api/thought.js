@@ -35,9 +35,22 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        
+        try {
+            const thoughtUpdate = await Thought.findOneAndUpdate(
+                {
+                    _id: {$eq: req.params.id}
+                },
+                req.body,
+                {
+                    new: true
+                }
+            )
+            res.status(200).json(thoughtUpdate)
+        } catch (err) {
+            res.status(500).json(err)
+        }
     } catch (err) {
         res.status(500).json(err)
     }
@@ -45,7 +58,12 @@ router.put('/', async (req, res) => {
 
 router.delete('/', async (req, res) => {
     try {
-        
+        const thoughtDelete = await Thought.findOneAndDelete(
+            {
+                _id: {$eq: req.params.id}
+            }
+        )
+        res.status(200).json(thoughtDelete)
     } catch (err) {
         res.status(500).json(err)
     }

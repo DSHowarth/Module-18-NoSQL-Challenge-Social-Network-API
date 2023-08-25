@@ -50,12 +50,12 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const userUpdate = await User.findOneAndDelete(
+        const userDelete = await User.findOneAndDelete(
             {
                 _id: {$eq: req.params.id}
             }
         )
-        res.status(200).json(userUpdate)
+        res.status(200).json(userDelete)
     } catch (err) {
         res.status(500).json(err)
     }
