@@ -58,11 +58,17 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
+
         const thoughtDelete = await Thought.findOneAndDelete(
             {
                 _id: {$eq: req.params.id}
-            }
+            },
         )
+        const thoughtUser = await User.findOne({username: {$eq: thoughtDelete.username}});
+        thoughtUser.thoughts.splice(thoughtUser.thoughts.indexOf(req.params.id), 1);
+        console.log('spliced')
+        thoughtUser.save();
+        console.log('saved')
         res.status(200).json(thoughtDelete)
     } catch (err) {
         res.status(500).json(err)
