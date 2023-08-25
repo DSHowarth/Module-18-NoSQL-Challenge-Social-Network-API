@@ -79,7 +79,7 @@ router.delete('/:userId/friends/:friendId', async (req, res) => {
 
         user.friends.splice(user.friends.indexOf(req.params.friendId), 1)
         user.save();
-        res.status(200).json(newUser)
+        res.status(200).json(user)
     } catch (err) {
         res.status(500).json(err)
     }
