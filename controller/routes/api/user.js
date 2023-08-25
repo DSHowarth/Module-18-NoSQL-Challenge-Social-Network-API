@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const user = await User.find({_id: {$eq: new ObjectId(req.params.id)}})
+        const user = await User.find({_id: {$eq: req.params.id}})
         res.status(200).json(user)
     } catch (err) {
         res.status(500).json(err)
