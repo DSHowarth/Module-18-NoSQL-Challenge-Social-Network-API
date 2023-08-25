@@ -3,7 +3,7 @@ const { ObjectId } = require('mongoose');
 const User = require('../../../models/User')
 const Thought = require('../../../models/Thought')
 
-
+// get all users
 router.get('/', async (req, res) => {
     try{
         const users = await User.find().select('-__v');
@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
     }
 })
 
+// get specific user
 router.get('/:id', async (req, res) => {
     try {
         const user = await User.find({_id: {$eq: req.params.id}}).select('-__v')
@@ -22,6 +23,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+// create new user
 router.post('/', async (req, res) => {
     try {
         const newUser = await User.create(req.body)
@@ -31,6 +33,7 @@ router.post('/', async (req, res) => {
     }
 })
 
+// update user
 router.put('/:id', async (req, res) => {
     try {
         const userUpdate = await User.findOneAndUpdate(
@@ -48,6 +51,7 @@ router.put('/:id', async (req, res) => {
     }
 })
 
+// delete user
 router.delete('/:id', async (req, res) => {
     try {
         const userDelete = await User.findOneAndDelete(
@@ -61,10 +65,13 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+// add new friend to user
 router.post('/:userId/friends/:friendId', async (req, res) => {
     try {
+        // find user
         const user = await User.findOne({_id: {$eq: req.params.userId}})
 
+        // add friend id (the _id of the other user) to array
         user.friends.push(req.params.friendId)
         user.save();
         res.status(200).json(user)
@@ -73,10 +80,12 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
     }
 })
 
+// remove friend from user
 router.delete('/:userId/friends/:friendId', async (req, res) => {
     try {
+        // find user
         const user = await User.findOne({_id: {$eq: req.params.userId}})
-
+        // remove ex-friend's _id value from array
         user.friends.splice(user.friends.indexOf(req.params.friendId), 1)
         user.save();
         res.status(200).json(user)

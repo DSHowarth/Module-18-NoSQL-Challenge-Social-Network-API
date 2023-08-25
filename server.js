@@ -10,6 +10,7 @@ app.use(express.json());
 
 app.use(router);
 
+// server waits until there is a confirmed connection to the database to start listening
 db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
