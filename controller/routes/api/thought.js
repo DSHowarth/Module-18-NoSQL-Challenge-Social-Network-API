@@ -23,7 +23,13 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        
+        const thoughtUser = await User.findOne({_id: {$eq: req.body.userId}})
+        const newThought = await Thought.create(req.body)
+
+        thoughtUser.thoughts.push(newThought._id)
+        thoughtUser.save();
+
+        res.status(200).json(newThought)
     } catch (err) {
         res.status(500).json(err)
     }
