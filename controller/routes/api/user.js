@@ -61,5 +61,16 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+router.post('/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const user = await User.findOne({_id: {$eq: req.params.userId}})
+
+        user.friends.push(req.params.friendId)
+        user.save();
+        res.status(200).json(newUser)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
 
 module.exports = router
