@@ -5,7 +5,7 @@ const Thought = require('../../../models/Thought')
 
 router.get('/', async (req, res) => {
     try {
-        const thoughts = await Thought.find();
+        const thoughts = await Thought.find().select('-__v');
         res.status(200).json(thoughts)
     } catch (err) {
         res.status(500).json(err)
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const thought = await Thought.find({ _id: {$eq: req.params.id}});
+        const thought = await Thought.find({ _id: {$eq: req.params.id}}).select('-__v');
         res.status(200).json(thought);
     } catch (err) {
         res.status(500).json(err)
@@ -71,7 +71,7 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/:thoughtId/reactions', async (req, res) => {
     try {
-        const thought = await Thought.findOne({_id: {$eq: req.body.thoughtId}})
+        const thought = await Thought.findOne({_id: {$eq: req.params.thoughtId}})
 
         thought.reactions.push(req.body)
         thought.save();
@@ -84,10 +84,13 @@ router.post('/:thoughtId/reactions', async (req, res) => {
 
 router.delete('/:thoughtId/reactions', async (req, res) => {
     try {
-        const thought = await Thought.findOne({_id: {$eq: req.body.thoughtId}})
-        const reactionDelete = await thought.reactions.id(req.body.reactionId).remove();
+        const thought = await Thought.findOne({_id: {$eq: req.params.thoughtId}})
+        console.log(thought);
+        const reactionDelete = thought.reactions.pull({reactionId: req.body.reactionId});
+        thought.save();
         res.status(200).json(reactionDelete)
     } catch (err) {
+        console.log(err)
         res.status(500).json(err)
     }
 })

@@ -28,7 +28,8 @@ const reactionSchema = new mongoose.Schema({
     {
         toJSON: {
             getters: true
-        }
+        },
+        id: false
     }
 )
 
@@ -52,7 +53,7 @@ const thoughtSchema = new mongoose.Schema(
         reactions: [reactionSchema]
     },
     {
-        validators: {
+        virtuals: {
             reactionCount: {
                 get () {
                     return this.reactions.length
@@ -60,8 +61,10 @@ const thoughtSchema = new mongoose.Schema(
             }
         },
         toJSON: {
-            virtuals: true
-        }
+            virtuals: true,
+            getters: true
+        },
+        id: false
     })
 
 const Thought = mongoose.model('Thought', thoughtSchema);

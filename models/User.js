@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema({
                     return this.friends.length;
                 }
             }
-        }
+        },
+        id: false
     })
 
 const User = mongoose.model('User', userSchema);

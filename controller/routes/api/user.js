@@ -6,7 +6,7 @@ const Thought = require('../../../models/Thought')
 
 router.get('/', async (req, res) => {
     try{
-        const users = await User.find();
+        const users = await User.find().select('-__v');
         res.status(200).json(users);
     } catch (err) {
         res.status(500).json(err)
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const user = await User.find({_id: {$eq: req.params.id}})
+        const user = await User.find({_id: {$eq: req.params.id}}).select('-__v')
         res.status(200).json(user)
     } catch (err) {
         res.status(500).json(err)
