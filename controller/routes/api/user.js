@@ -42,9 +42,24 @@ router.put('/:id', async (req, res) => {
                 new: true
             }
         )
+        res.status(200).json(userUpdate)
     } catch (err) {
-
+        res.status(500).json(err)
     }
 })
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const userUpdate = await User.findOneAndDelete(
+            {
+                _id: {$eq: req.params.id}
+            }
+        )
+        res.status(200).json(userUpdate)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
+
 
 module.exports = router
